@@ -1,0 +1,14 @@
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\bin\Debug\QuanLyQuanBida.exe.config
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\bin\Debug\QuanLyQuanBida.exe
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\bin\Debug\QuanLyQuanBida.pdb
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.csproj.AssemblyReference.cache
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.csproj.SuggestedBindingRedirects.cache
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.fLogin.resources
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.Properties.Resources.resources
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.csproj.GenerateResource.cache
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.csproj.CoreCompileInputs.cache
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.exe
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.pdb
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.fTableManager.resources
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.fAccountProfile.resources
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.fAdmin.resources
