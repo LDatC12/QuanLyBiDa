@@ -21,7 +21,17 @@ namespace QuanLyQuanBida.DTO
             this.ID = (int)row["id"];
             this.Name = row["name"].ToString();
             this.Status = row["status"].ToString();
+            this.Timestart = row["timestart"].ToString();
         }
+
+        public string timestart;
+
+        public string Timestart
+        {
+            get { return timestart; }
+            set { timestart = value; }
+        }
+
         public string status;
 
         public string Status
@@ -43,7 +53,5 @@ namespace QuanLyQuanBida.DTO
             get { return iD; }
             set { iD = value; }
         }
-
-
     }
 }

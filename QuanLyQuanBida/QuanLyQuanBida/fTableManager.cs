@@ -1,12 +1,14 @@
 ﻿using QuanLyQuanBida.DAO;
 using QuanLyQuanBida.DTO;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,15 +19,30 @@ namespace QuanLyQuanBida
 {
     public partial class fTableManager : Form
     {
-        public fTableManager()
+        // Tạo constructor để lấy account từ form khác
+        private Account loginAccount;
+
+        public Account LoginAccount
+        {
+            get { return loginAccount; }
+            set { loginAccount = value; ChangeAccount(loginAccount.Type);  }
+        }
+        public fTableManager(Account acc)
         {
             InitializeComponent();
 
+            this.LoginAccount = acc;
+
             LoadTable();
             LoadCategory();
+            LoadTablePrice();
         }
 
         #region Method
+        void ChangeAccount(int type)
+        {
+            adminToolStripMenuItem.Enabled = type == 1;
+        }
         void LoadCategory()
         {
             List<Category> listCategory = CategoryDAO.Instance.GetListCategory();
@@ -33,6 +50,13 @@ namespace QuanLyQuanBida
             cbCategory.DisplayMember = "Name";
         }
 
+        void LoadTablePrice()
+        {
+            cbTablePrice.Text = "70000";
+            cbTablePrice.Items.Add("70000");
+            cbTablePrice.Items.Add("80000");
+
+        }
         void LoadFoodListByCategoryID(int id)
         {
             List<Food> listFood = FoodDAO.Instance.GetFoodByCategoryID(id);
@@ -42,6 +66,8 @@ namespace QuanLyQuanBida
 
         void LoadTable()
         {
+            flpTable.Controls.Clear();
+
             List<Table> tableList = TableDAO.Instance.LoadTableList();
         
             foreach (Table item in tableList)
@@ -50,7 +76,7 @@ namespace QuanLyQuanBida
                 btn.Click += btn_Click;
                 btn.Tag = item;
 
-                btn.Text = item.Name + "\n" + item.Status;
+                btn.Text = item.Name + "\n" + item.Status + "\n";
 
                 switch (item.Status)
                 {
@@ -59,13 +85,18 @@ namespace QuanLyQuanBida
 
                         btn.Image = System.Drawing.Image.FromFile(@"D:\contest\Login\bidatable1.png");
                         btn.BackgroundImageLayout = ImageLayout.Zoom;
-                        btn.Font = new Font(btn.Font.FontFamily, 15);
+                        btn.Font = new Font(btn.Font.FontFamily, 13);
 
                         break;
                     default:
                         btn.Image = System.Drawing.Image.FromFile(@"D:\contest\Login\bidatable3.png");
                         btn.BackgroundImageLayout = ImageLayout.Zoom;
-                        btn.Font = new Font(btn.Font.FontFamily, 15);
+                        btn.Font = new Font(btn.Font.FontFamily, 13);
+                        if (item.timestart != "")
+                        {
+                            DateTime tim = DateTime.Parse(item.timestart);
+                            btn.Text += tim.ToString("HH:mm:ss");
+                        }
                         break;
                 }
                 flpTable.Controls.Add(btn);
@@ -74,9 +105,10 @@ namespace QuanLyQuanBida
         void ShowBill(int id)
         {
             lsvBill.Items.Clear();
-            List<QuanLyQuanBida.DTO.Menu> listBillInfo = MenuDAO.Instance.GetListMenuByTable(id);
+
+            List<Menu> listBillInfo = MenuDAO.Instance.GetListMenuByTable(id);
             float totalPrice = 0;
-            foreach (QuanLyQuanBida.DTO.Menu item in listBillInfo)
+            foreach (Menu item in listBillInfo)
             {
                 ListViewItem lsvItem = new ListViewItem(item.FoodName.ToString());
                 lsvItem.SubItems.Add(item.Count.ToString());
@@ -110,7 +142,7 @@ namespace QuanLyQuanBida
         }
         private void thôngTinCáNhânToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fAccountProfile f = new fAccountProfile();
+            fAccountProfile f = new fAccountProfile(loginAccount);
             f.ShowDialog();
         }
 
@@ -136,16 +168,20 @@ namespace QuanLyQuanBida
             LoadFoodListByCategoryID(id);
         }
 
-        #endregion
 
         private void btnAddFood_Click(object sender, EventArgs e)
         {
             Table table = lsvBill.Tag as Table;
-
+            if (table == null)
+            {
+                MessageBox.Show("Please select table", "Notification");
+                return;
+            }
             int idBill = BillDAO.Instance.GetUnCheckBillIDByTableID(table.ID);
             int foodID = (cbFood.SelectedItem as Food).ID;
             int count = (int)nmFoodCount.Value;
 
+            DataProvider.Instance.ExecuteQuery("UPDATE dbo.TableFood SET timestart = GETDATE() WHERE id = " + table.ID.ToString());
             if (idBill == -1)
             {
                 BillDAO.Instance.InsertBill(table.ID);
@@ -157,6 +193,77 @@ namespace QuanLyQuanBida
             }
 
             ShowBill(table.ID);
+
+            LoadTable();
+        }
+
+        private void btnCheckOut_Click(object sender, EventArgs e)
+        {
+            Table table = lsvBill.Tag as Table;
+            if (table  == null)
+            {
+                MessageBox.Show("Please select table", "Notification");
+                return;
+            }
+            int idBill = BillDAO.Instance.GetUnCheckBillIDByTableID(table.ID);
+            int discount = (int)nmDiscount.Value;
+
+            
+            double foodPrice = Convert.ToDouble(txtTotalPrice.Text.Split(',')[0]);
+
+            double totalFoodPrice = foodPrice - (foodPrice / 100 * discount);
+            if (idBill != -1)
+            {
+                string timeStart = TableDAO.Instance.GetTimeStart(table.ID);
+                if (timeStart != "")
+                {
+                    //00:00:00:00 - dd:HH:mm:ss
+                    double day = Convert.ToDouble(timeStart.Split(':')[0]);
+                    double hour = Convert.ToDouble(timeStart.Split(':')[1]);
+                    double minute = Convert.ToDouble(timeStart.Split(':')[2]);
+                    double second = Double.Parse(timeStart.Split(':')[3], CultureInfo.InvariantCulture.NumberFormat);
+
+                    int timePlay = Convert.ToInt32(hour * 60 + minute);
+                    double tablePrice = (day * 24 + hour * 60 + minute + second / 60) * Convert.ToDouble(cbTablePrice.Text.ToString()) / 60; // Tính theo 90000 một phút
+
+                    double finalTotalPrice = totalFoodPrice + tablePrice;
+
+                    if (MessageBox.Show(String.Format("Are you sure to print bill for {0} with discount {1}% on total price of {2}đ is {3}đ \nNumber of hours played :{4} mins \nPrice of table {5} + {6} = {7}", table.Name, discount, foodPrice, totalFoodPrice, timePlay, tablePrice.ToString("0.00"), totalFoodPrice.ToString("0.00"), finalTotalPrice.ToString("0.00")), "Notification", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    {
+                        DataProvider.Instance.ExecuteQuery("UPDATE dbo.TableFood SET timestart = NULL WHERE id = " + table.ID.ToString());
+                        // MessageBox.Show(idBill.ToString() + "\n"+ discount.ToString() + "\n" + finalTotalPrice.ToString(), "e");
+                        BillDAO.Instance.CheckOut(idBill, discount, (int)tablePrice);
+                        ShowBill(table.ID);
+
+                        LoadTable();
+                    }
+                }
+          
+            }
+        }
+
+
+        #endregion
+
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.lbTime.Text = DateTime.Now.ToString("HH:mm:ss");
+        }
+
+        private void fileSystemWatcher1_Changed(object sender, System.IO.FileSystemEventArgs e)
+        {
+
+        }
+
+        private void lbTime_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

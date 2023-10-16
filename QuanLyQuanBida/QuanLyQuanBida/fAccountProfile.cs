@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLyQuanBida.DTO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,11 +13,26 @@ namespace QuanLyQuanBida
 {
     public partial class fAccountProfile : Form
     {
-        public fAccountProfile()
+
+        private Account loginAccount;
+
+        public Account LoginAccount
         {
-            InitializeComponent();
+            get { return loginAccount; }
+            set { loginAccount = value; ChangeAccount(loginAccount); }
         }
 
+        public fAccountProfile(Account acc)
+        {
+            InitializeComponent();
+
+            LoginAccount = acc;
+        }
+        void ChangeAccount(Account acc)
+        {
+            txtUserName.Text = LoginAccount.UserName;
+            txtDisplayName.Text = LoginAccount.DisplayName;
+        }
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.Close();

@@ -95,6 +95,7 @@
             this.dtgvTable = new System.Windows.Forms.DataGridView();
             this.tpAccount = new System.Windows.Forms.TabPage();
             this.panel22 = new System.Windows.Forms.Panel();
+            this.btnResetPassword = new System.Windows.Forms.Button();
             this.panel23 = new System.Windows.Forms.Panel();
             this.cbAccountType = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -111,7 +112,6 @@
             this.btnAddAccount = new System.Windows.Forms.Button();
             this.panel27 = new System.Windows.Forms.Panel();
             this.dtgvAccount = new System.Windows.Forms.DataGridView();
-            this.btnResetPassword = new System.Windows.Forms.Button();
             this.tcAdmin.SuspendLayout();
             this.tpBill.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -183,15 +183,16 @@
             this.panel2.Controls.Add(this.dtgvBill);
             this.panel2.Location = new System.Drawing.Point(6, 43);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(512, 351);
+            this.panel2.Size = new System.Drawing.Size(634, 351);
             this.panel2.TabIndex = 1;
             // 
             // dtgvBill
             // 
+            this.dtgvBill.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dtgvBill.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtgvBill.Location = new System.Drawing.Point(3, 3);
             this.dtgvBill.Name = "dtgvBill";
-            this.dtgvBill.Size = new System.Drawing.Size(506, 345);
+            this.dtgvBill.Size = new System.Drawing.Size(628, 345);
             this.dtgvBill.TabIndex = 0;
             // 
             // panel1
@@ -201,28 +202,29 @@
             this.panel1.Controls.Add(this.dtpkFromDate);
             this.panel1.Location = new System.Drawing.Point(6, 6);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(512, 31);
+            this.panel1.Size = new System.Drawing.Size(634, 31);
             this.panel1.TabIndex = 0;
             // 
             // btnViewbill
             // 
-            this.btnViewbill.Location = new System.Drawing.Point(218, 5);
+            this.btnViewbill.Location = new System.Drawing.Point(288, 5);
             this.btnViewbill.Name = "btnViewbill";
             this.btnViewbill.Size = new System.Drawing.Size(75, 23);
             this.btnViewbill.TabIndex = 2;
             this.btnViewbill.Text = "Thống kê";
             this.btnViewbill.UseVisualStyleBackColor = true;
+            this.btnViewbill.Click += new System.EventHandler(this.btnViewbill_Click);
             // 
             // dtpkToDate
             // 
-            this.dtpkToDate.Location = new System.Drawing.Point(309, 8);
+            this.dtpkToDate.Location = new System.Drawing.Point(431, 8);
             this.dtpkToDate.Name = "dtpkToDate";
             this.dtpkToDate.Size = new System.Drawing.Size(200, 20);
             this.dtpkToDate.TabIndex = 1;
             // 
             // dtpkFromDate
             // 
-            this.dtpkFromDate.Location = new System.Drawing.Point(3, 8);
+            this.dtpkFromDate.Location = new System.Drawing.Point(13, 8);
             this.dtpkFromDate.Name = "dtpkFromDate";
             this.dtpkFromDate.Size = new System.Drawing.Size(200, 20);
             this.dtpkFromDate.TabIndex = 0;
@@ -781,6 +783,15 @@
             this.panel22.Size = new System.Drawing.Size(292, 343);
             this.panel22.TabIndex = 13;
             // 
+            // btnResetPassword
+            // 
+            this.btnResetPassword.Location = new System.Drawing.Point(179, 151);
+            this.btnResetPassword.Name = "btnResetPassword";
+            this.btnResetPassword.Size = new System.Drawing.Size(110, 46);
+            this.btnResetPassword.TabIndex = 4;
+            this.btnResetPassword.Text = "Đặt lại mật khẩu";
+            this.btnResetPassword.UseVisualStyleBackColor = true;
+            // 
             // panel23
             // 
             this.panel23.Controls.Add(this.cbAccountType);
@@ -923,15 +934,6 @@
             this.dtgvAccount.Name = "dtgvAccount";
             this.dtgvAccount.Size = new System.Drawing.Size(328, 337);
             this.dtgvAccount.TabIndex = 0;
-            // 
-            // btnResetPassword
-            // 
-            this.btnResetPassword.Location = new System.Drawing.Point(179, 151);
-            this.btnResetPassword.Name = "btnResetPassword";
-            this.btnResetPassword.Size = new System.Drawing.Size(110, 46);
-            this.btnResetPassword.TabIndex = 4;
-            this.btnResetPassword.Text = "Đặt lại mật khẩu";
-            this.btnResetPassword.UseVisualStyleBackColor = true;
             // 
             // fAdmin
             // 

@@ -17,6 +17,33 @@ namespace QuanLyQuanBida
         public fAdmin()
         {
             InitializeComponent();
+            LoadDateTimePickerBill();
+            LoadListBillByDate(dtpkFromDate.Value, dtpkToDate.Value);
         }
+        #region methods
+
+        void LoadDateTimePickerBill()
+        {
+            DateTime today = DateTime.Now;
+            // reset về ngày đầu tháng
+            dtpkFromDate.Value = new DateTime(today.Year, today.Month, 1);
+            // reset cuối tháng = đầu tháng + 30 - 1;
+            dtpkToDate.Value = dtpkFromDate.Value.AddMonths(1).AddDays(-1);
+        }
+
+        void LoadListBillByDate(DateTime checkIn, DateTime checkOut)
+        {
+            dtgvBill.DataSource = BillDAO.Instance.GetBillListByDate(checkIn, checkOut);
+        }
+        
+        #endregion
+
+        #region events
+
+        private void btnViewbill_Click(object sender, EventArgs e)
+        {
+            LoadListBillByDate(dtpkFromDate.Value, dtpkToDate.Value);
+        }
+        #endregion
     }
 }

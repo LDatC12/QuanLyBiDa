@@ -33,12 +33,34 @@ namespace QuanLyQuanBida.DAO
             }
             return -1;
         }
-
         public void InsertBill(int id)
         {
             DataProvider.Instance.ExecuteNonQuery("EXEC USP_InsertBill @idTable", new object[] {id});
         }
 
+        public DataTable GetBillListByDate(DateTime checkIn, DateTime checkOut)
+        {
+            return DataProvider.Instance.ExecuteQuery("EXEC USP_GetListBillByDate @checkIn , @checkOut", new object[] { checkIn, checkOut });
+        }
+
+        public void CheckOut(int id, int discount, int totalPrice)
+        {
+            // Khi cập nhật nhớ là phải xét tất cả đều không rỗng hoặc null
+
+            // Cẩn thận khi cập nhật phải chừa 1 khoảng trống giữa các biến truyền vào ví dụ như   + discount +
+
+            // Cẩn thận khi truyền float vì nó có dấu phẩy , 
+
+            // Cách tốt nhất là làm như vầy
+
+            // DataProvider.Instance.ExecuteNonQuery("USP_InsertBillInfo @idBill , @idFood , @count", new object[] { idBill, idFood, count });
+
+
+            string query = "UPDATE dbo.Bill SET status = 1 , " + "discount = " + discount + " , DateCheckOut = GETDATE() , " + "totalPrice = " + totalPrice + " WHERE id = " + id;
+
+
+            DataProvider.Instance.ExecuteNonQuery(query);
+        } 
         public int GetMaxIDBill()
         {
             try

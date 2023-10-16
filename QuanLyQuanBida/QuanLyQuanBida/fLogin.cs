@@ -1,4 +1,5 @@
 ﻿using QuanLyQuanBida.DAO;
+using QuanLyQuanBida.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,7 +26,8 @@ namespace QuanLyQuanBida
             string passWord = txtPassWord.Text;
             if (Login(userName, passWord))
             {
-                fTableManager f = new fTableManager();
+                Account loginAccount = AccountDAO.Instance.GetAccountByUserName(userName);
+                fTableManager f = new fTableManager(loginAccount);
                 this.Hide();
                 f.ShowDialog();
                 this.Show();
