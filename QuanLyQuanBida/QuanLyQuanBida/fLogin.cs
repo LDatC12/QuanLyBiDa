@@ -19,8 +19,7 @@ namespace QuanLyQuanBida
         {
             InitializeComponent();
         }
-
-        private void btnLogin_Click(object sender, EventArgs e)
+        private void btnLogin_Click_1(object sender, EventArgs e)
         {
             string userName = txtUserName.Text;
             string passWord = txtPassWord.Text;
@@ -37,6 +36,7 @@ namespace QuanLyQuanBida
                 MessageBox.Show("The username or password you entered is incorrect, try again!");
             }
         }
+
         bool Login(string userName, string passWord)
         {
             // Nhớ cách parameter ra để ko nó sẽ lỗi 
@@ -55,6 +55,11 @@ namespace QuanLyQuanBida
             {
                 e.Cancel = true;
             }
+        }
+
+        private void fLogin_Load(object sender, EventArgs e)
+        {
+
         }
 
     }

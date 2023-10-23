@@ -16,16 +16,9 @@ CREATE TABLE TableFood
 (
 	id INT IDENTITY PRIMARY KEY,
 	name NVARCHAR(100) NOT NULL DEFAULT N'Chưa đặt tên',
-	status NVARCHAR(100) NOT NULL DEFAULT N'Trống'-- Trống || Có người
+	status NVARCHAR(100) NOT NULL DEFAULT N'Trống',-- Trống || Có người
+	timestart DATETIME NOT NULL DEFAULT NULL
 )
-
-
-ALTER TABLE TableFood
-ADD timestart DATETIME
-
-UPDATE dbo.TableFood SET timestart = NULL
-
-SELECT * FROM TableFood
 
 GO
 
@@ -49,6 +42,7 @@ GO
 
 DBCC CHECKIDENT (Food, RESEED, 0); -- reset IDENTITY cho id chạy bắt đầu từ 1
 GO
+
 CREATE TABLE Food
 (
 	id INT IDENTITY PRIMARY KEY,
@@ -68,8 +62,9 @@ CREATE TABLE Bill
 	DateCheckIn DATE NOT NULL DEFAULT GETDATE(),
 	DateCheckOut DATE,
 	idTable INT NOT NULL,
-	status INT NOT NULL DEFAULT 0 -- 1: Đã thanh toàn && 0: Chưa thanh toán
-
+	status INT NOT NULL DEFAULT 0, -- 1: Đã thanh toàn && 0: Chưa thanh toán
+	discount INT DEFAULT 0,
+	totalPrice FLOAT DEFAULT 0
 	FOREIGN KEY (idTable) REFERENCES dbo.TableFood(id)
 )
 GO
@@ -88,6 +83,7 @@ CREATE TABLE BillInfo
 	FOREIGN KEY (idFood) REFERENCES dbo.Food(id)
 )
 GO
+
 INSERT INTO dbo.Account
 	   ( UserName, 
 		 DisplayName,
@@ -113,6 +109,7 @@ VALUES ( N'staff',
 	   )
 GO
 
+-- Tim user bang ten dang nhap
 CREATE PROC USP_GetAccountByUserName 
 @userName nvarchar(100)
 AS
@@ -125,6 +122,7 @@ EXEC dbo.USP_GetAccountByUserName @userName = N'K9' -- nvarchar(50)
 
 GO
 
+-- Login
 CREATE PROC USP_Login
 @userName nvarchar(100), @passWord nvarchar(100)
 AS
@@ -133,7 +131,7 @@ BEGIN
 END
 GO
 
--- Thêm bàn
+-- Thêm 10 bàn mẫu
 DECLARE @i INT = 0
 
 WHILE @i <= 10
@@ -141,10 +139,9 @@ BEGIN
 	INSERT dbo.TableFood (name) VALUES (N'Bàn ' + CAST(@i AS nvarchar(100)))
 	SET @i = @i + 1
 END 
-GO]]]
+GO
 
-DELETE TableFood
-
+-- Lay danh sach ban
 CREATE PROC USP_GetTableList
 AS SELECT * FROM dbo.TableFood
 GO
@@ -282,16 +279,9 @@ VALUES (3,
 		2
 )
 GO
-SELECT f.name, bi.count, f.price, f.price*bi.count AS totalPrice FROM dbo.BillInfo AS bi, dbo.Bill AS b, dbo.Food AS f
-WHERE bi.idBill = b.id AND bi.idFood = f.id AND b.idTable = 3
 
-SELECT * FROM dbo.Bill
-SELECT * FROM dbo.BillInfo
-SELECT * FROM dbo.Food
-SELECT * FROM dbo.FoodCategory
 
-SELECT * FROM dbo.Bill
-
+-- Insert bill
 CREATE PROC USP_InsertBill
 @idTable INT
 AS 
@@ -314,7 +304,9 @@ END
 GO
 
 EXEC USP_InsertBill @idTable
+GO
 
+-- InsertBillInfo
 CREATE PROC USP_InsertBillInfo
 @idBill INT, @idFood INT, @count INT 
 AS
@@ -349,12 +341,8 @@ BEGIN
 END
 GO
 
-SELECT MAX(id) FROM Bill
 
-
-DELETE BillInfo
-DELETE Bill
-
+-- Tao trigger khi BillInfo duoc update
 CREATE TRIGGER UTG_UpdateBillInfo
 ON dbo.BillInfo FOR INSERT, UPDATE
 AS
@@ -371,7 +359,8 @@ BEGIN
 
 END
 GO
-DROP TRIGGER UTG_UpdateBillInfo
+
+-- Tao trigger khi Bill duoc update
 CREATE TRIGGER UTG_UpdateBill
 ON dbo.Bill FOR UPDATE
 AS
@@ -393,73 +382,28 @@ BEGIN
 END
 GO
 
-SELECT f.name, bi.count, f.price, f.price*bi.count AS totalPrice FROM dbo.BillInfo AS bi, dbo.Bill AS b, dbo.Food AS f WHERE bi.idBill = b.id AND bi.idFood = f.id AND b.idTable = 1 
+CREATE TRIGGER UTG_DeleteBillInfo
+ON BillInfo FOR DELETE
+AS 
+BEGIN
+	DECLARE @idBillInfo INT
+	DECLARE @idBill INT
+	SELECT @idBillInfo = id, @idBill = Deleted.idBill FROM Deleted
 
+	DECLARE @idTable INT
+	SELECT @idTable = idTable FROM Bill WHERE id = @idBill
+	
+	DECLARE @count INT = 0
 
-ALTER TABLE Bill
-ADD discount INT
+	SELECT @count = COUNT(*) FROM BillInfo AS bi, Bill AS b WHERE b.id = bi.idBill AND b.id = @idBill AND b.status = 0
 
-UPDATE dbo.Bill SET discount = 0
-UPDATE dbo.Bill SET totalPrice = 0
+	IF (@count = 0)
+		UPDATE TableFood SET status = N'Trống' WHERE id = @idTable
 
-SELECT discount FROM Bill
-
-
-DROP PROC USP_SwitchTable
-CREATE PROC USP_SwitchTable
-@idTable1 INT, @idTable2 INT
-AS BEGIN
-
-	DECLARE @idFirstBill INT
-	DECLARE @idSecondBill INT
-
-	SELECT @idSecondBill = id FROM dbo.Bill WHERE idTable = @idTable2 AND status = 0
-	SELECT @idFirstBill = id FROM dbo.Bill WHERE idTable = @idTable1 AND status = 0
-
-	IF (@idFirstBill = NULL)
-	BEGIN
-		INSERT INTO dbo.Bill (
-				DateCheckIn, 
-				DateCheckOut,
-				idTable,
-				status)
-		VALUES ( GETDATE(),
-				NULL,
-				@idTable1,
-				0
-				)
-		SELECT @idFirstBill = MAX(id) FROM dbo.Bill WHERE idTable = @idTable1 AND status = 0
-	END
-
-	IF (@idSecondBill = NULL)
-	BEGIN
-		INSERT INTO dbo.Bill (
-				DateCheckIn, 
-				DateCheckOut,
-				idTable,
-				status)
-		VALUES ( GETDATE(),
-				NULL,
-				@idTable2,
-				0
-				)
-		SELECT @idFirstBill = MAX(id) FROM dbo.Bill WHERE idTable = @idTable2 AND status = 0
-	END
-
-	SELECT id INTO IDBillInfoTable FROM dbo.BillInfo WHERE idBill = @idSecondBill
-
-	UPDATE dbo.BillInfo SET idBill = @idSecondBill WHERE idBill = @idFirstBill
-
-	UPDATE dbo.BillInfo SET idBill = @idFirstBill WHERE id IN (SELECT * FROM IDBillInfoTable)
-
-	DROP TABLE IDBillInfoTable
 END
 GO
 
-ALTER TABLE dbo.Bill ADD totalPrice FLOAT
-
-GO
-
+-- Lay list bang ngay
 CREATE PROC USP_GetListBillByDate
 @checkIn DATE, @checkOut DATE
 AS
@@ -471,6 +415,27 @@ BEGIN
 END
 GO
 
-DELETE Bill
 
-SELECT * FROM Account WHERE userName = 'k9'
+-- Update tai khoan
+CREATE PROC USP_UpdateAccount
+@userName NVARCHAR(100), @displayName NVARCHAR(100), @password NVARCHAR(100), @newPassWord NVARCHAR(100)
+AS
+BEGIN
+	DECLARE @isRightPass INT = 0
+	SELECT @isRightPass = COUNT(*) FROM Account WHERE UserName = @userName AND PassWord = @password
+
+	IF (@isRightPass = 1)
+	BEGIN
+		IF (@newPassWord = NULL OR @newPassWord = '')
+		BEGIN
+			UPDATE Account SET DisplayName = @displayName WHERE UserName = @userName
+		END
+		ELSE
+			UPDATE Account SET DisplayName = @displayName, PassWord = @newPassWord WHERE UserName = @userName
+	END
+END
+GO
+
+INSERT Food (name, idCategory, price) VALUES ( N'', 0, 0.0)
+
+DELETE Account WHERE UserName = 'staff'

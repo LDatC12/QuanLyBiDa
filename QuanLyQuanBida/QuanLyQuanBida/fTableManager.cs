@@ -42,6 +42,7 @@ namespace QuanLyQuanBida
         void ChangeAccount(int type)
         {
             adminToolStripMenuItem.Enabled = type == 1;
+            thôngTinTàiKhoảnToolStripMenuItem.Text += " (" + loginAccount.DisplayName + ")";
         }
         void LoadCategory()
         {
@@ -149,7 +150,31 @@ namespace QuanLyQuanBida
         private void adminToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fAdmin f = new fAdmin();
+            f.InsertFood += f_InsertFood;
+            f.DeleteFoood += f_DeleteFood;
+            f.UpdateFood += f_UpdateFood;
             f.ShowDialog();
+        }
+        
+        void f_InsertFood(object sender, EventArgs e)
+        {
+            LoadFoodListByCategoryID((cbCategory.SelectedItem as Category).ID);
+            if (lsvBill.Tag != null)
+                ShowBill((lsvBill.Tag as Table).ID);
+        }
+        void f_DeleteFood(object sender, EventArgs e)
+        {
+            LoadFoodListByCategoryID((cbCategory.SelectedItem as Category).ID);
+            if (lsvBill.Tag != null)
+                ShowBill((lsvBill.Tag as Table).ID);
+            LoadTable();
+        }
+
+        void f_UpdateFood(object sender, EventArgs e)
+        {
+            LoadFoodListByCategoryID((cbCategory.SelectedItem as Category).ID);
+            if (lsvBill.Tag != null)
+                ShowBill((lsvBill.Tag as Table).ID);
         }
 
         private void cbCategory_SelectedIndexChanged(object sender, EventArgs e)
@@ -197,9 +222,10 @@ namespace QuanLyQuanBida
             LoadTable();
         }
 
+        // Thanh toán
         private void btnCheckOut_Click(object sender, EventArgs e)
         {
-            Table table = lsvBill.Tag as Table;
+             Table table = lsvBill.Tag as Table;
             if (table  == null)
             {
                 MessageBox.Show("Please select table", "Notification");
@@ -245,7 +271,7 @@ namespace QuanLyQuanBida
 
         #endregion
 
-
+        // Tính giờ 
         private void timer1_Tick(object sender, EventArgs e)
         {
             this.lbTime.Text = DateTime.Now.ToString("HH:mm:ss");
