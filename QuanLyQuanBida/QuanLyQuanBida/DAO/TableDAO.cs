@@ -62,5 +62,17 @@ namespace QuanLyQuanBida.DAO
             }
             return rs;
         }
+        public string GetTimeStart1(int id)
+        {
+            string rs = "";
+            DataTable data = DataProvider.Instance.ExecuteQuery("SELECT * FROM TableFood WHERE id = " + id);
+            foreach (DataRow item in data.Rows)
+            {
+                Table tableInfo = new Table(item);
+                DateTime date1 = DateTime.Parse(tableInfo.timestart);
+                rs = date1.ToString();
+            }
+            return rs;
+        }
     }
 }

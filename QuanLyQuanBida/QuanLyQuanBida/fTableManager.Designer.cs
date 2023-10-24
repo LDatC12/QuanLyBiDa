@@ -57,10 +57,12 @@
             this.cbCategory = new System.Windows.Forms.ComboBox();
             this.flpTable = new System.Windows.Forms.FlowLayoutPanel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.lbTime = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
+            this.btnBillDetail = new System.Windows.Forms.Button();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.homeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.menuStrip2.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -68,8 +70,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nmDiscount)).BeginInit();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nmFoodCount)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -92,6 +94,7 @@
             // 
             this.menuStrip2.BackColor = System.Drawing.Color.SteelBlue;
             this.menuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.homeToolStripMenuItem,
             this.adminToolStripMenuItem,
             this.thôngTinTàiKhoảnToolStripMenuItem});
             this.menuStrip2.Location = new System.Drawing.Point(0, 0);
@@ -105,8 +108,9 @@
             this.adminToolStripMenuItem.BackColor = System.Drawing.Color.Transparent;
             this.adminToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.adminToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.adminToolStripMenuItem.Image = global::QuanLyQuanBida.Properties.Resources.R;
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
-            this.adminToolStripMenuItem.Size = new System.Drawing.Size(72, 27);
+            this.adminToolStripMenuItem.Size = new System.Drawing.Size(88, 27);
             this.adminToolStripMenuItem.Text = "Admin";
             this.adminToolStripMenuItem.Click += new System.EventHandler(this.adminToolStripMenuItem_Click);
             // 
@@ -118,8 +122,9 @@
             this.đăngXuấtToolStripMenuItem});
             this.thôngTinTàiKhoảnToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.thôngTinTàiKhoảnToolStripMenuItem.ForeColor = System.Drawing.Color.SpringGreen;
+            this.thôngTinTàiKhoảnToolStripMenuItem.Image = global::QuanLyQuanBida.Properties.Resources.OIP__1_;
             this.thôngTinTàiKhoảnToolStripMenuItem.Name = "thôngTinTàiKhoảnToolStripMenuItem";
-            this.thôngTinTàiKhoảnToolStripMenuItem.Size = new System.Drawing.Size(180, 27);
+            this.thôngTinTàiKhoảnToolStripMenuItem.Size = new System.Drawing.Size(196, 27);
             this.thôngTinTàiKhoảnToolStripMenuItem.Text = "Thông tin tài khoản";
             // 
             // thôngTinCáNhânToolStripMenuItem
@@ -267,6 +272,7 @@
             this.nmDiscount.Size = new System.Drawing.Size(84, 27);
             this.nmDiscount.TabIndex = 4;
             this.nmDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nmDiscount.ValueChanged += new System.EventHandler(this.nmDiscount_ValueChanged);
             // 
             // panel4
             // 
@@ -370,12 +376,37 @@
             this.fileSystemWatcher1.SynchronizingObject = this;
             this.fileSystemWatcher1.Changed += new System.IO.FileSystemEventHandler(this.fileSystemWatcher1_Changed);
             // 
+            // btnBillDetail
+            // 
+            this.btnBillDetail.BackColor = System.Drawing.Color.MediumSeaGreen;
+            this.btnBillDetail.FlatAppearance.BorderSize = 0;
+            this.btnBillDetail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBillDetail.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBillDetail.ForeColor = System.Drawing.Color.White;
+            this.btnBillDetail.Location = new System.Drawing.Point(433, 563);
+            this.btnBillDetail.Name = "btnBillDetail";
+            this.btnBillDetail.Size = new System.Drawing.Size(202, 40);
+            this.btnBillDetail.TabIndex = 4;
+            this.btnBillDetail.Text = "Hóa đơn chi tiết";
+            this.btnBillDetail.UseVisualStyleBackColor = false;
+            this.btnBillDetail.Click += new System.EventHandler(this.btnBillDetail_Click);
+            // 
+            // homeToolStripMenuItem
+            // 
+            this.homeToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.homeToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.homeToolStripMenuItem.Image = global::QuanLyQuanBida.Properties.Resources.kisspng_house_real_estate_home_building_dormitory_5b4663123fd570_4975341015313395382615;
+            this.homeToolStripMenuItem.Name = "homeToolStripMenuItem";
+            this.homeToolStripMenuItem.Size = new System.Drawing.Size(84, 27);
+            this.homeToolStripMenuItem.Text = "Home";
+            // 
             // fTableManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(29)))), ((int)(((byte)(36)))));
             this.ClientSize = new System.Drawing.Size(1146, 652);
+            this.Controls.Add(this.btnBillDetail);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lbTime);
@@ -401,8 +432,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nmDiscount)).EndInit();
             this.panel4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nmFoodCount)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -442,5 +473,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnBillDetail;
+        private System.Windows.Forms.ToolStripMenuItem homeToolStripMenuItem;
     }
 }

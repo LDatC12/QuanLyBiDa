@@ -84,13 +84,13 @@ namespace QuanLyQuanBida
                     case "Trống":
                         //btn.BackColor = Color.Green;
 
-                        btn.Image = System.Drawing.Image.FromFile(@"D:\contest\Login\bidatable1.png");
+                        btn.Image = System.Drawing.Image.FromFile(@"D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\Resources\bidatable1.png");
                         btn.BackgroundImageLayout = ImageLayout.Zoom;
                         btn.Font = new Font(btn.Font.FontFamily, 13);
 
                         break;
                     default:
-                        btn.Image = System.Drawing.Image.FromFile(@"D:\contest\Login\bidatable3.png");
+                        btn.Image = System.Drawing.Image.FromFile(@"D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\Resources\bidatable3.png");
                         btn.BackgroundImageLayout = ImageLayout.Zoom;
                         btn.Font = new Font(btn.Font.FontFamily, 13);
                         if (item.timestart != "")
@@ -225,7 +225,7 @@ namespace QuanLyQuanBida
         // Thanh toán
         private void btnCheckOut_Click(object sender, EventArgs e)
         {
-             Table table = lsvBill.Tag as Table;
+            Table table = lsvBill.Tag as Table;
             if (table  == null)
             {
                 MessageBox.Show("Please select table", "Notification");
@@ -290,6 +290,30 @@ namespace QuanLyQuanBida
         private void button1_Click(object sender, EventArgs e)
         {
             
+        }
+
+        private void btnBillDetail_Click(object sender, EventArgs e)
+        {
+            Table table = lsvBill.Tag as Table;
+            if (table == null)
+            {
+                MessageBox.Show("Please select table", "Notification");
+                return;
+            }
+            try
+            {
+                BillDetail f = new BillDetail(table.ID, (int)nmDiscount.Value, Convert.ToInt32(cbTablePrice.Text.ToString()));
+                f.Show();
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void nmDiscount_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

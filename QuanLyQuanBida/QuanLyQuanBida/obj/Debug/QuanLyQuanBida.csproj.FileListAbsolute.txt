@@ -12,3 +12,5 @@ D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\
 D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.fTableManager.resources
 D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.fAccountProfile.resources
 D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.fAdmin.resources
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.BillDetail.resources
+D:\Đồ án cuối kì môn lập trình desktop\QuanLyQuanBida\QuanLyQuanBida\obj\Debug\QuanLyQuanBida.csproj.ResolveComReference.cache
